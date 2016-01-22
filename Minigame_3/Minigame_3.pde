@@ -1,14 +1,13 @@
-PImage restaurant, cannon, sushi;
-PVector vel;
-float x, y, mode;
+PImage restaurant, cannon;
+float mode;
+float theta;
+ArrayList<Sushi> sushi = new ArrayList <Sushi>();
 
 void setup() {
   size(1280, 720, P3D);
 
   restaurant = loadImage("restaurant.jpg");
   cannon = loadImage("cannon.png");
-  sushi = loadImage("single sushi.png");
-
   mode = 0;
 
   cannon.resize(250, 97); 
@@ -32,13 +31,20 @@ void draw() {
     textSize(20);
     String des = "Fill up the bellies of the hungry tech students with your powerful sushi cannon!";
     text(des, 250, height/2, 800, height);
-  } else{
+  } else if (mode ==1){
 
     image(restaurant, 0, 0);
-  
+    
+    for(int i = 0; i < sushi.size(); i++) {
+      Sushi s = sushi.get(i);
+      s.shoot();
+    }
+
+    theta = 0.4-atan2(600-mouseY,mouseX);
+
     pushMatrix();
     translate(0, 600);
-    rotate(atan2(mouseY-475, mouseX));
+    rotate(theta);
     image(cannon, -40, -100);
     popMatrix();
   }
@@ -48,5 +54,7 @@ void mousePressed() {
   if (mode == 0){
     mode = 1;
   }
-  //image(sushi, x, y, z);
+  if (mode == 1){
+  sushi.add(new Sushi(0+100*cos(theta), 600-100*sin(theta)));
+  }
 }
